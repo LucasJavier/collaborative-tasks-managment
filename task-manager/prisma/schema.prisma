@@ -1,0 +1,94 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Rol {
+  id       Int      @id @default(autoincrement())
+  nombre   String
+  descripcion String
+  usuarios Usuario[]
+
+  @@map("rol") 
+}
+
+model Usuario {
+  id       Int      @id @default(autoincrement())
+  nombre   String
+  apellido String
+  nombreUsuario String @unique   
+  email    String   @unique
+  password String
+  equipos  UsuarioEquipo[]
+  rolID Int  @default(1)
+  rol     Rol @relation(fields: [rolID], references: [id])
+  equiposJefe Equipo[]
+  comentarios Comentarios[]
+  tarea Tarea[]
+
+  @@map("usuario")
+}
+
+model Equipo {
+  id      Int      @id @default(autoincrement())
+  nombre  String   @unique
+  creadoEn DateTime @default(now())
+  tareas  Tarea[]
+  usuarios UsuarioEquipo[] 
+  idJefe Int
+  usuarioJefe Usuario @relation(fields: [idJefe], references: [id])
+  codigoInvitacion String? @unique
+  codigoExpiracion DateTime?
+
+  @@map("equipo")
+}
+
+enum Prioridad {
+  baja
+  media
+  alta
+
+  @@map("prioridad")
+}
+
+model Tarea {
+  id         Int     @id @default(autoincrement())
+  titulo     String
+  descripcion String?
+  completada Boolean? @default(false)
+  equipoId   Int
+  equipo     Equipo  @relation(fields: [equipoId], references: [id], onDelete: Cascade)
+  comentarios Comentarios[]
+  prioridad Prioridad
+  fechaLimite DateTime
+  usuarioIdCreo Int
+  usuario Usuario @relation(fields: [usuarioIdCreo], references: [id])
+
+  @@map("tarea")
+}
+
+model UsuarioEquipo {
+  id        Int     @id @default(autoincrement())
+  usuarioId Int
+  equipoId  Int
+  usuario   Usuario @relation(fields: [usuarioId], references: [id])
+  equipo    Equipo  @relation(fields: [equipoId], references: [id], onDelete: Cascade)
+
+  @@map("usuario_equipo")
+}
+
+model Comentarios {
+  id Int @id @default(autoincrement())
+  usuarioId Int
+  tareaId Int
+  comentario String
+  usuario Usuario @relation(fields: [usuarioId], references: [id])
+  tarea Tarea @relation(fields: [tareaId], references: [id], onDelete: Cascade)
+  fechaComentario DateTime @default(now())
+
+  @@map("comentarios")
+}
