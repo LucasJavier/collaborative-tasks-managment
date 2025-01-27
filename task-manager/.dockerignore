@@ -5,7 +5,6 @@ yarn-error.log
 .pnpm-debug.log
 
 # Ignorar configuraciones locales y entornos
-.env.local
 .env.development
 .env.test
 .env.production

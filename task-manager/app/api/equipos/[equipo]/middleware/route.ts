@@ -2,9 +2,9 @@ import { prisma } from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 import { getToken } from "next-auth/jwt";
 
-export async function GET(request: NextRequest, context: { params: { equipo: string } }) {
+export async function GET(request: NextRequest,  { params }: { params: { equipo: string } }) {
   try {
-    const { equipo } = await context.params;
+    const { equipo } = params;
     const equipoId = parseInt(equipo);
 
     if (isNaN(equipoId)) {

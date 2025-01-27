@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma"; 
 
-export async function PATCH(req: NextRequest, context: { params: { tarea: string; comentario: string } }) {
+export async function PATCH(req: NextRequest, { params }: { params: { tarea: string; comentario: string } }) {
     try {
-        const { comentario } = await context.params;
+        const { comentario } = params;
         const comentarioId = parseInt(comentario);
 
         if (isNaN(comentarioId)) {
