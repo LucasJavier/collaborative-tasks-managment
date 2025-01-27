@@ -1,0 +1,33 @@
+# Ignorar dependencias locales y caché de npm/yarn/pnpm
+node_modules
+npm-debug.log
+yarn-error.log
+.pnpm-debug.log
+
+# Ignorar configuraciones locales y entornos
+.env.local
+.env.development
+.env.test
+.env.production
+
+# Ignorar caché y builds de Next.js
+.next/
+.next/cache
+
+# Ignorar Prisma y bases de datos locales
+prisma/migrations
+prisma/*.db
+prisma/.env
+
+# Ignorar archivos de logs y reportes
+*.log
+logs/
+coverage/
+.cache
+playwright-report/
+
+# Ignorar configuraciones locales específicas del sistema operativo o IDEs
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

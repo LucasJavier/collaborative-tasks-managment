@@ -1,0 +1,31 @@
+version: "3.8"
+services:
+  app:
+    build:
+      context: . # Carpeta donde está el Dockerfile
+    ports:
+      - "3000:3000" # Mapea el puerto 3000 del contenedor al 3000 de la máquina
+    environment:
+      # Variables de entorno necesarias para la app
+      DATABASE_URL: "postgresql://postgres:root1234@db:5432/Task_Manager?schema=public"
+      NODE_ENV: "production"
+    depends_on:
+      - db # Asegura que el servicio 'db' esté activo antes de levantar la app
+    volumes:
+      - .:/app # Mapea el directorio de la app local al contenedor
+      - /app/node_modules # Previene conflictos de dependencias
+    stdin_open: true # Mantiene la terminal abierta (útil para debug)
+
+  db:
+    image: postgres:15-alpine # Imagen ligera de PostgreSQL
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: root1234
+      POSTGRES_DB: Task_Manager
+    ports:
+      - "5432:5432" # Puerto del contenedor para acceder desde tu máquina
+    volumes:
+      - postgres_data:/var/lib/postgresql/data # Persistencia de datos
+
+volumes:
+  postgres_data:

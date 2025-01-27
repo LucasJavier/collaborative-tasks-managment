@@ -39,3 +39,11 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Docker data (volúmenes, logs, etc.)
+/docker-data
+/*.pid
+/*.sock
+
+# Prisma
+/prisma/migrations/
