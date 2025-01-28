@@ -30,7 +30,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         if(!user) {throw new Error("No user found");}
 
         const passwordStr = String(password);
-        const isValidPassword = compare(passwordStr, user.password);
+        const isValidPassword = await compare(passwordStr, user.password);
         if(!isValidPassword) throw new Error("Invalid password");
 
         return{
@@ -90,4 +90,5 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     signIn: "/auth/login", // Página personalizada de inicio de sesión
     error: "/auth/unauthorized", // Página personalizada de error
   },
+  trustHost: true, // Permitir localhost como host confiable
 });

@@ -9,14 +9,8 @@ yarn-error.log
 .env.test
 .env.production
 
-# Ignorar caché y builds de Next.js
-.next/
+# Ignorar caché de Next.js, pero no la build
 .next/cache
-
-# Ignorar Prisma y bases de datos locales
-prisma/migrations
-prisma/*.db
-prisma/.env
 
 # Ignorar archivos de logs y reportes
 *.log

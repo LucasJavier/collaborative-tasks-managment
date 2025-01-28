@@ -5,14 +5,14 @@ services:
     ports:
       - "3000:3000" 
     environment:
-      DATABASE_URL: "postgresql://postgres:root1234@db:5432/Task_Manager?schema=public"
+      DATABASE_URL: "postgresql://postgres:root1234@host.docker.internal:5432/Task_Manager?schema=public"  # Usa host.docker.internal
       NODE_ENV: "production"
     depends_on:
-      - db 
+      - db
     volumes:
-      - .:/app
       - /app/node_modules 
     stdin_open: true 
+    command: /bin/sh -c "npx prisma migrate deploy && npm start"
   db:
     image: postgres:15-alpine 
     environment:
@@ -20,8 +20,4 @@ services:
       POSTGRES_PASSWORD: root1234
       POSTGRES_DB: Task_Manager
     ports:
-      - "5432:5432" 
-    volumes:
-      - postgres_data:/var/lib/postgresql/data 
-volumes:
-  postgres_data:
+      - "5432:5432"
