@@ -1,0 +1,44 @@
+name: CI/CD Pipeline
+on:
+  push:
+    branches:
+      - main
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      # Clonar el repositorio
+      - name: Clonar el repositorio
+      uses: actions/checkout@v3
+
+    # Autenticarse en Google Cloud
+    - name: Autenticarse en Google Cloud
+    uses: google-github-actions/auth@v1
+    with:
+      credentials_json: ${{ secrets.GCP_SA_KEY }}
+
+    # Configurar Google Cloud SDK
+    - name: Configurar Google Cloud SDK
+    uses: google-github-actions/setup-gcloud@v1
+    with:
+      project_id: ${{ secrets.GCP_PROJECT }}
+
+    # Autenticar Docker con Artifact Registry
+    - name: Autenticar Docker con Artifact Registry
+    run: |
+        gcloud auth configure-docker us-central1-docker.pkg.dev --quiet
+
+    # Construir y enviar la imagen a Artifact Registry
+    - name: Construir y enviar la imagen a Artifact Registry
+    run: |
+      docker build -t us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT}}/task-manager-repo/image-1 .
+      docker push us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT}}/task-manager-repo/image-1
+
+    # Desplegar en Cloud Run
+    - name: Desplegar en Cloud Run
+    run: |
+      gcloud run deploy mi-app \
+        --image us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT}}/task-manager-repo/image-1 \
+        --platform managed \
+        --region us-central1 \
+        --allow-unauthenticated
