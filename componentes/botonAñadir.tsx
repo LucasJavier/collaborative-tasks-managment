@@ -17,5 +17,3 @@ const BotonAñadir: React.FC<BotonAñadirProps> = ({ onClick }) => {
 };
 
 export default BotonAñadir;
-
-// Comentario de prueba del deploy.yml!
