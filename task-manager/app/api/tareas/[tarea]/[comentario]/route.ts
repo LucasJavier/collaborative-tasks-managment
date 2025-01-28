@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma"; 
 
-export async function PATCH(req: NextRequest, { params }: { params: { tarea: string; comentario: string } }) {
+export async function PATCH(req: NextRequest, { params }: { params: Promise<{ comentario: string }> }) {
     try {
-        const { comentario } = params;
+        const { comentario } = await params;
         const comentarioId = parseInt(comentario);
 
         if (isNaN(comentarioId)) {
@@ -31,9 +31,10 @@ export async function PATCH(req: NextRequest, { params }: { params: { tarea: str
     }  
 }
 
-export async function DELETE(req: NextRequest, context: { params: { tarea: string; comentario: string } }) {
+export async function DELETE(req: NextRequest, 
+    { params } : { params: Promise<{ equipo: string; comentario: string }> }) {
     try {
-        const { comentario } = await context.params;
+        const { equipo, comentario } = await params;
         const comentarioId = parseInt(comentario);
 
         if (isNaN(comentarioId)) {

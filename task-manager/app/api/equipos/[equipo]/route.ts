@@ -1,9 +1,9 @@
 import { prisma } from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(request: NextRequest, { params} : { params: { equipo: string } }) {
+export async function GET(request: NextRequest, { params} : { params: Promise<{ equipo: string }> }) {
     try {
-        const { equipo } = params;
+        const { equipo } = await params;
         
         const equipoId = parseInt(equipo);
 
@@ -55,8 +55,8 @@ export async function GET(request: NextRequest, { params} : { params: { equipo: 
     }
 }
 
-export async function DELETE(req: NextRequest, context: { params: { equipo: string } }) {
-    const { equipo } = await context.params;
+export async function DELETE(req: NextRequest, { params} : { params: Promise<{ equipo: string }> }) {
+    const { equipo } = await params;
     const equipoId = parseInt(equipo);
 
     if (isNaN(equipoId)) {

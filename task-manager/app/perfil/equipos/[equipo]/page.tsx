@@ -16,7 +16,7 @@ interface Equipo {
   creadoEn: string;
 }
 
-export default function EquipoPage({ params }: { params: { equipo: string } }) {
+export default function EquipoPage({ params }: { params: Promise<{ equipo: string }> }) {
   const [tareas, setTarea] = useState<Tarea[]>([]);
   const [equipo, setEquipo] = useState<Equipo | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -27,8 +27,8 @@ export default function EquipoPage({ params }: { params: { equipo: string } }) {
 
   useEffect(() => {
     const unwrapParams = async () => {
-      const id = await params;
-      setIdEquipo(id.equipo);
+      const { equipo }  = await params;
+      setIdEquipo(equipo);
     };
     unwrapParams();
   }, [params]);

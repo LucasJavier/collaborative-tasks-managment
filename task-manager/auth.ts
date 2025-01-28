@@ -12,7 +12,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         usuario_correo: {label: "Usuario o Correo", type: "string"},
         password: {label: "Password", type: "password"},
       },
-      async authorize(credentials: {usuario_correo: string; password: string}){
+      async authorize(credentials){
         if (!credentials?.usuario_correo || !credentials?.password) {
           throw new Error("Credenciales incompletas.");
         }
@@ -29,16 +29,17 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
         if(!user) {throw new Error("No user found");}
 
-        const isValidPassword = await compare(password, user.password);
+        const passwordStr = String(password);
+        const isValidPassword = compare(passwordStr, user.password);
         if(!isValidPassword) throw new Error("Invalid password");
 
         return{
-          id: user.id,
+          id: String(user.id),
           nombre: user.nombre,
           apellido: user.apellido,
           nombreUsuario: user.nombreUsuario,
           email: user.email,
-          rolID: user.rolID
+          rolId: user.rolID
         }
       } 
     })

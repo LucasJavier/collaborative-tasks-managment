@@ -8,7 +8,7 @@ import { es } from "date-fns/locale";
 import { useSession } from "next-auth/react";
 import ComentarioCard from '@/componentes/ComentarioCard'; 
 
-export default function TareaPage({ params }: { params: { equipo: string; tarea: string } }) {
+export default function TareaPage({ params }: { params: Promise<{equipo: string; tarea: string }> }) {
   const [idTarea, setIdTarea] = useState<string | null>(null);
   const [tarea, setTarea] = useState<Tarea | null>(null);
   const [idEquipo, setEquipo] = useState<number>(NaN);
