@@ -23,7 +23,10 @@ export default function PerfilPageLayout({ children }: { children: React.ReactNo
   const { user } = session;
 
   const isEquipoPage = currentPath.startsWith('/perfil/equipos/') && 
-                    currentPath.split('/').filter(Boolean).length === 3;
+                    currentPath.split('/').filter(Boolean).length === 3 && 
+                    !currentPath.includes('/crear') && 
+                    !currentPath.includes('/unirse');
+
 
   return (
     <div className="flex-1 grid grid-cols-4 h-screen">
