@@ -2,6 +2,8 @@ import { NextResponse, NextRequest } from "next/server";
 import { getToken } from "next-auth/jwt";
 
 export async function middleware(req: NextRequest) {
+  const cookieToken = req.cookies.get("__Secure-next-auth.session-token");
+  console.log("Cookie Token:", cookieToken); // Verifica si está en las cookies directamente
   const token = await getToken({ req, secret: process.env.JWT_CLAVE! });
   console.log(token)
   const path = req.nextUrl.pathname;
