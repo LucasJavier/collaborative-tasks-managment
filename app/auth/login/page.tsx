@@ -7,7 +7,7 @@ import { signIn } from "next-auth/react";
 import { loginSchema } from "@/lib/zod";
 import { z } from "zod";
 
-export default function Register() {
+export default function Login() {
   const [signUpData, setSignUpData] = useState({ usuario_correo: "", password: "" });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false); 
@@ -44,7 +44,7 @@ export default function Register() {
 
   return (
     <div className="flex-1 flex items-center justify-center min-h-screen flex-col">
-      <form onSubmit={handleSubmit} className="w-96 p-6 bg-[rgb(28,27,25)] shadow-md rounded">
+      <form onSubmit={handleSubmit} className="w-96   p-6 bg-[rgb(28,27,25)] shadow-md rounded">
         <h1 className="text-xl font-bold mb-4">Inicia sesión</h1>
         <input
           type="usuario_correo"
