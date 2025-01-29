@@ -31,6 +31,8 @@ jobs:
           echo "AUTH_SECRET=${{ secrets.AUTH_SECRET }}" >> .env.local
           echo "AUTH_GITHUB_ID=${{ secrets.AUTH_GITHUB_ID }}" >> .env.local
           echo "AUTH_GITHUB_SECRET=${{ secrets.AUTH_GITHUB_SECRET }}" >> .env.local
+          echo "NEXTAUTH_URL=${{ secrets.NEXTAUTH_URL }}" >> .env.local
+          echo "NEXTAUTH_SECRET=${{ secrets.NEXTAUTH_SECRET }}" >> .env.local
 
       # Autenticar Docker con Artifact Registry
       - name: Autenticar Docker con Artifact Registry
@@ -51,3 +53,4 @@ jobs:
             --platform managed \
             --region us-central1 \
             --allow-unauthenticated
+            --set-env-vars NEXTAUTH_URL=${{ secrets.NEXTAUTH_URL }},NEXTAUTH_SECRET=${{ secrets.NEXTAUTH_SECRET }}
