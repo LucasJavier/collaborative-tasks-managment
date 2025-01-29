@@ -3,7 +3,7 @@ import { getToken } from "next-auth/jwt";
 
 export async function middleware(req: NextRequest) {
   const token = await getToken({ req, secret: process.env.JWT_CLAVE! });
-
+  console.log(token)
   const path = req.nextUrl.pathname;
   const isAuthPath = path.startsWith("/auth");
   const isRootPath = path === "/";
