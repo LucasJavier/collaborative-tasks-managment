@@ -34,12 +34,6 @@ jobs:
           docker build -t us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT }}/task-manager-repo/image-1 .
           docker push us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT }}/task-manager-repo/image-1
 
-      # Imprimir DATABASE_URL para verificar si está configurado correctamente
-      - name: Imprimir protocolo de DATABASE_URL
-        run: |
-          echo "Protocolo: $(echo '${{ secrets.DATABASE_URL }}' | cut -d':' -f1)"
-
-
       # Desplegar en Cloud Run
       - name: Desplegar en Cloud Run
         run: |
@@ -49,4 +43,3 @@ jobs:
             --region us-central1 \
             --allow-unauthenticated \
             --set-env-vars NEXTAUTH_URL=${{ secrets.NEXTAUTH_URL }},NEXTAUTH_SECRET=${{ secrets.NEXTAUTH_SECRET }},DATABASE_URL=${{ secrets.DATABASE_URL }},JWT_CLAVE=${{ secrets.JWT_CLAVE }},AUTH_SECRET=${{ secrets.AUTH_SECRET }},AUTH_GITHUB_ID=${{ secrets.AUTH_GITHUB_ID }},AUTH_GITHUB_SECRET=${{ secrets.AUTH_GITHUB_SECRET }}
-#testing line
