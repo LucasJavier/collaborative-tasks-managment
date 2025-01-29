@@ -49,3 +49,4 @@ jobs:
             --region us-central1 \
             --allow-unauthenticated \
             --set-env-vars NEXTAUTH_URL=${{ secrets.NEXTAUTH_URL }},NEXTAUTH_SECRET=${{ secrets.NEXTAUTH_SECRET }},DATABASE_URL=${{ secrets.DATABASE_URL }},JWT_CLAVE=${{ secrets.JWT_CLAVE }},AUTH_SECRET=${{ secrets.AUTH_SECRET }},AUTH_GITHUB_ID=${{ secrets.AUTH_GITHUB_ID }},AUTH_GITHUB_SECRET=${{ secrets.AUTH_GITHUB_SECRET }}
+#testing line
