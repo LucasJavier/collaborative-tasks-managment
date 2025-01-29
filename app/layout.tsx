@@ -6,7 +6,7 @@ import { SessionProvider } from "next-auth/react";
 import { ModalProvider } from './contexto/modalContexto';
 
 export const metadata = {
-  title: "Gestión de Tareas",
+  title: "Gestor de Tareas",
   description: "Aplicación de gestión de tareas colaborativa",
 };
 
