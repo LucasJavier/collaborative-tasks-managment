@@ -52,5 +52,5 @@ jobs:
             --image us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT }}/task-manager-repo/image-1 \
             --platform managed \
             --region us-central1 \
-            --allow-unauthenticated
+            --allow-unauthenticated \
             --set-env-vars NEXTAUTH_URL=${{ secrets.NEXTAUTH_URL }},NEXTAUTH_SECRET=${{ secrets.NEXTAUTH_SECRET }}
