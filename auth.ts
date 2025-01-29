@@ -3,7 +3,7 @@ import GitHub from "next-auth/providers/github"
 import { prisma } from "./lib/prisma";
 import Credentials from "next-auth/providers/credentials"
 import { compare } from "bcrypt";
- 
+  
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [GitHub,
     Credentials({
@@ -62,13 +62,17 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       });
       return true;
     },
-    async jwt( {token,user}: {token: any; user: any}){
+    async jwt( {token,user,account}: {token: any; user: any; account: any}){
       if(user){
         const dbUser = await prisma.usuario.findUnique({where: {email: user.email}});
         if (!dbUser) throw new Error("Usuario no encontrado");
         token.rolId = dbUser?.rolID || 1;
         token.id = dbUser.id;
-        token.nombreUsuario = dbUser.nombreUsuario;
+        if (account?.provider === "github") {
+          token.nombreUsuario = dbUser.nombre; 
+        } else {
+          token.nombreUsuario = dbUser.nombreUsuario; 
+        }
       }
       return token;
     },
