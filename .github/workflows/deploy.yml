@@ -35,8 +35,10 @@ jobs:
           docker push us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT }}/task-manager-repo/image-1
 
       # Imprimir DATABASE_URL para verificar si está configurado correctamente
-      - name: Imprimir DATABASE_URL
-        run: echo "DATABASE_URL=${{ secrets.DATABASE_URL }}"
+      - name: Imprimir protocolo de DATABASE_URL
+        run: |
+          echo "Protocolo: $(echo '${{ secrets.DATABASE_URL }}' | cut -d':' -f1)"
+
 
       # Desplegar en Cloud Run
       - name: Desplegar en Cloud Run
