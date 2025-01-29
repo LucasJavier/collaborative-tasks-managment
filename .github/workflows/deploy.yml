@@ -23,17 +23,6 @@ jobs:
         with:
           project_id: ${{ secrets.GCP_PROJECT }}
 
-      # Configurar variables de entorno
-      - name: Configurar variables de entorno
-        run: |
-          echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" >> .env
-          echo "JWT_CLAVE=${{ secrets.JWT_CLAVE }}" >> .env
-          echo "AUTH_SECRET=${{ secrets.AUTH_SECRET }}" >> .env.local
-          echo "AUTH_GITHUB_ID=${{ secrets.AUTH_GITHUB_ID }}" >> .env.local
-          echo "AUTH_GITHUB_SECRET=${{ secrets.AUTH_GITHUB_SECRET }}" >> .env.local
-          echo "NEXTAUTH_URL=${{ secrets.NEXTAUTH_URL }}" >> .env.local
-          echo "NEXTAUTH_SECRET=${{ secrets.NEXTAUTH_SECRET }}" >> .env.local
-
       # Autenticar Docker con Artifact Registry
       - name: Autenticar Docker con Artifact Registry
         run: |
@@ -53,4 +42,11 @@ jobs:
             --platform managed \
             --region us-central1 \
             --allow-unauthenticated \
-            --set-env-vars NEXTAUTH_URL=${{ secrets.NEXTAUTH_URL }},NEXTAUTH_SECRET=${{ secrets.NEXTAUTH_SECRET }}
+            --set-env-vars \
+              NEXTAUTH_URL=${{ secrets.NEXTAUTH_URL }}, \
+              NEXTAUTH_SECRET=${{ secrets.NEXTAUTH_SECRET }}, \
+              DATABASE_URL=${{ secrets.DATABASE_URL }}, \
+              JWT_CLAVE=${{ secrets.JWT_CLAVE }}, \
+              AUTH_SECRET=${{ secrets.AUTH_SECRET }}, \
+              AUTH_GITHUB_ID=${{ secrets.AUTH_GITHUB_ID }}, \
+              AUTH_GITHUB_SECRET=${{ secrets.AUTH_GITHUB_SECRET }}
