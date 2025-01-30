@@ -6,3 +6,7 @@ Cosas a hacer:
 - Crear opcion de editar tarea (fecha, nombre, prioridad, etc.)
 - Al clickear "Eliminar tarea" o "Eliminar equipo", que aparezca primero una aviso (doble confirmación)
 - Hacerlo más responsive
+
+Modelo BD:
+
+![Modelo relacional de mi base de datos](assets/ModeloBD.png)
