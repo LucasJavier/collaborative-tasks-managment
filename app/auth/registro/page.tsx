@@ -6,7 +6,7 @@ import { registroSchema } from "@/lib/zod";
 import { z } from "zod";
 import { signIn } from "next-auth/react";
 
-export default function Login() {
+export default function Registro() {
   const [error, setError] = useState("");
   const [registroData, setRegistroData] = useState({
     nombre: "",
@@ -60,7 +60,7 @@ export default function Login() {
         const errorData = await res.json();
         setError(errorData.error || "Ocurrió un error.");
       } catch (err) {
-        setError("Error interno del servidor. Intenta nuevamente.");
+        setError("Error interno del servidor.");
       }
     }
 

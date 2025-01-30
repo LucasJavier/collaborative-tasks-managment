@@ -1,20 +1,19 @@
 import { prisma } from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
-import { format, startOfDay, endOfDay } from "date-fns"; // Importar para trabajar con fechas
+import { startOfDay, endOfDay } from "date-fns"; // Importar para trabajar con fechas
 import { getToken } from "next-auth/jwt";
 
 export async function GET(request: NextRequest) {
-    const token = await getToken({ req: request, secret: process.env.JWT_CLAVE! });
-    if (!token || !token.id) {
-        return NextResponse.json({ error: "Usuario no autenticado" }, { status: 401 });
-    }
-
-    const userId = token.id;
-
     try {
-        const today = new Date();
-        const comienzoDia = startOfDay(today);
-        const finDelDia = endOfDay(today);
+        const token = await getToken({ req: request, secret: process.env.JWT_CLAVE! });
+        if (!token || !token.id) {
+            return NextResponse.json({ error: "Usuario no autenticado" }, { status: 401 });
+        }
+    
+        const userId = token.id;
+        const hoy = new Date();
+        const comienzoDia = startOfDay(hoy);
+        const finDelDia = endOfDay(hoy);
 
         const tareas = await prisma.tarea.findMany({
             where: {

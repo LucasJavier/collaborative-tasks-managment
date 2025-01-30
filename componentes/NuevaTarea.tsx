@@ -11,7 +11,7 @@ interface NuevaTarea {
 const NuevaTarea: React.FC<NuevaTarea> = ({ onClose, onSave, equipoId, usuarioId }) => {
   const [titulo, setTitulo] = useState("");
   const [descripcion, setDescripcion] = useState("");
-  const [prioridad, setPrioridad] = useState<Prioridad>(    Prioridad.media); 
+  const [prioridad, setPrioridad] = useState<Prioridad>(Prioridad.media); 
   const [fechaLimite, setFechaLimite] = useState("");
 
   const handleSave = () => {

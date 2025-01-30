@@ -40,7 +40,7 @@ export async function GET(request: NextRequest,  { params }: { params: Promise<{
   } catch (error) {
     console.error(error);
     return NextResponse.json(
-      { error: "Ocurrió un error en el servidor. Inténtalo nuevamente más tarde." },
+      { error: "Ocurrió un error en el servidor." },
       { status: 500 }
     );
   }

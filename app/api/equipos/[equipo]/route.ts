@@ -56,19 +56,18 @@ export async function GET(request: NextRequest, { params} : { params: Promise<{ 
 }
 
 export async function DELETE(req: NextRequest, { params} : { params: Promise<{ equipo: string }> }) {
-    const { equipo } = await params;
-    const equipoId = parseInt(equipo);
-
-    if (isNaN(equipoId)) {
-        return NextResponse.json({ error: "ID de equipo inválido" }, { status: 400 });
-    }
-
     try {
+        const { equipo } = await params;
+        const equipoId = parseInt(equipo);
+    
+        if (isNaN(equipoId)) {
+            return NextResponse.json({ error: "ID de equipo inválido" }, { status: 400 });
+        }
         const deletedTeam = await prisma.equipo.delete({
             where: { id: equipoId },
         });
 
-        return NextResponse.json({ message: "Equipo eliminado exitosamente", tarea: deletedTeam });
+        return NextResponse.json({ message: "Tarea eliminada exitosamente", tarea: deletedTeam });
     } catch (error) {
         return NextResponse.json({ error: "Error al eliminar la tarea" }, { status: 500 });
     }

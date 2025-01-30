@@ -5,7 +5,7 @@ generator client {
 datasource db {
   provider  = "postgresql"
   url       = env("DATABASE_URL")  // Para conexiones regulares
-  //directUrl = env("DIRECT_URL")    // Para migraciones directas
+ // directUrl = env("DIRECT_URL")    // Para migraciones directas
 }
 
 model Rol {

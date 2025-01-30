@@ -6,7 +6,7 @@ import Image from "next/image";
 import BotonAñadir from "@/componentes/botonAñadir";
 import { useModal } from "@/app/contexto/modalContexto";
 
-export default function PerfilPageLayout({ children }: { children: React.ReactNode }) {
+export default function PerfilLayout({ children }: { children: React.ReactNode }) {
   const { data: session, status } = useSession();
   const router = useRouter();
   const currentPath = usePathname();

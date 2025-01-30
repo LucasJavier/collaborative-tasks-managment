@@ -2,13 +2,14 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
 export async function GET(req: NextRequest, { params }: { params: Promise<{ tarea: string }> }) {
-    const { tarea } = await params;
-    const tareaId = parseInt(tarea);
-
-    if (isNaN(tareaId)) {
-    return NextResponse.json({ error: "ID de tarea inválido" }, { status: 400 });
-    }
     try {
+        const { tarea } = await params;
+        const tareaId = parseInt(tarea);
+    
+        if (isNaN(tareaId)) {
+        return NextResponse.json({ error: "ID de tarea inválido" }, { status: 400 });
+        }
+
         const task = await prisma.tarea.findUnique({
             where: { id: tareaId },
             include: { 
@@ -21,10 +22,10 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ tare
             return NextResponse.json({ error: "Tarea no encontrada" }, { status: 404 });
         }
     
-        const { comentarios, ...tarea } = task;
+        const { comentarios, ...tareas } = task;
     
         return NextResponse.json({
-            tarea,
+            tareas,
             comentarios,
         });
     } catch (error) {
@@ -33,12 +34,12 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ tare
 }
 
 export async function PATCH(req: NextRequest, { params} : { params: Promise<{ tarea: string }> }) {
-    const { tarea } = await params;
-    const tareaId = parseInt(tarea);
-    if (isNaN(tareaId)) {
-        return NextResponse.json({ error: "ID de tarea inválido" }, { status: 400 });
-    }
     try {
+        const { tarea } = await params;
+        const tareaId = parseInt(tarea);
+        if (isNaN(tareaId)) {
+            return NextResponse.json({ error: "ID de tarea inválido" }, { status: 400 });
+        }
         const { completada } = await req.json();
 
         if (typeof completada !== "boolean") {
@@ -62,12 +63,13 @@ export async function PATCH(req: NextRequest, { params} : { params: Promise<{ ta
 }
 
 export async function POST(req: NextRequest, { params} : { params: Promise<{ tarea: string }> }) {
-    const { tarea } = await params;
-    const tareaId = parseInt(tarea);
-    if (isNaN(tareaId)) {
-        return NextResponse.json({ error: "ID de tarea inválido" }, { status: 400 });
-    }
     try {
+        const { tarea } = await params;
+        const tareaId = parseInt(tarea);
+        if (isNaN(tareaId)) {
+            return NextResponse.json({ error: "ID de tarea inválido" }, { status: 400 });
+        }
+        
         const { textoComentario, usuarioId } = await req.json();  
 
         if (!textoComentario || typeof textoComentario !== "string") {
@@ -90,14 +92,14 @@ export async function POST(req: NextRequest, { params} : { params: Promise<{ tar
 }
 
 export async function DELETE(req: NextRequest, { params} : { params: Promise<{ tarea: string }> }) {
-    const { tarea } = await params;
-    const tareaId = parseInt(tarea);
-
-    if (isNaN(tareaId)) {
-        return NextResponse.json({ error: "ID de tarea inválido" }, { status: 400 });
-    }
-
     try {
+        const { tarea } = await params;
+        const tareaId = parseInt(tarea);
+    
+        if (isNaN(tareaId)) {
+            return NextResponse.json({ error: "ID de tarea inválido" }, { status: 400 });
+        }
+        
         const deletedTask = await prisma.tarea.delete({
             where: { id: tareaId },
         });
