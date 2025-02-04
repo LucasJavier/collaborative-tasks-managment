@@ -5,6 +5,7 @@ import Credentials from "next-auth/providers/credentials"
 import { compare } from "bcrypt";
   
 export const { handlers, signIn, signOut, auth } = NextAuth({
+  debug: true,
   providers: [GitHub,
     Credentials({
       name: "Credenciales",
