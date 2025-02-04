@@ -1,0 +1,20 @@
+node_modules/
+.next/cache/
+npm-debug.log
+yarn-error.log
+.pnpm-debug.log
+
+.env*
+.auth.ts
+
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+prisma/migrations/  # Solo necesario si usas migraciones en tiempo de desarrollo
+docker-compose.yml  # No lo necesitas en Vercel
+DockerfileG  # Si no lo usas en Vercel, mejor excluirlo
+README.md  # No es necesario en producción
+tests/  # Si tienes una carpeta de pruebas
+coverage/  # Reportes de cobertura de tests
