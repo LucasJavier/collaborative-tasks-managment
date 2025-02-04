@@ -86,7 +86,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       return session;
     }
   },
-  secret: process.env.JWT_CLAVE!,
+  secret: process.env.NEXTAUTH_SECRET!,
   session: {
     strategy: "jwt", // Usamos JWT para manejar sesiones
   },
