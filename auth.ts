@@ -5,7 +5,6 @@ import Credentials from "next-auth/providers/credentials"
 import { compare } from "bcrypt";
   
 export const { handlers, signIn, signOut, auth } = NextAuth({
-  debug: true,
   providers: [GitHub,
     Credentials({
       name: "Credenciales",
@@ -33,6 +32,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         const passwordStr = String(password);
         const isValidPassword = await compare(passwordStr, user.password);
         if(!isValidPassword) throw new Error("Invalid password");
+
+        console.log(user.id);
+        console.log(user.nombreUsuario);
 
         return{
           id: String(user.id),
@@ -63,6 +65,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             rolID: 1,
           },
         });
+        console.log(nombre);
         return true;
       } catch (error) {
         console.error("Error en signIn callback:", error);
@@ -81,6 +84,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           token.nombreUsuario = dbUser.nombreUsuario; 
         }
       }
+      console.log(token)
       return token;
     },
     async session( {session,token}: {session: any; token: any}){
@@ -90,6 +94,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         session.user.id = token.id;
         session.user.name = token.nombreUsuario;
       }
+      console.log(session)
       return session;
     }
   },
@@ -101,6 +106,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     signIn: "/auth/login", // Página personalizada de inicio de sesión
     error: "/auth/unauthorized", // Página personalizada de error
   },
-  trustHost: true, // Permitir localhost como host confiable
+  trustHost: true,
 });
 
