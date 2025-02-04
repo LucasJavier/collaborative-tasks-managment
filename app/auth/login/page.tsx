@@ -32,7 +32,6 @@ export default function Login() {
       password: signUpData.password,
       redirect: false,
     });
-    console.log(res);
     if (!res || res.error) {
       setError(res?.error || "Credenciales inválidas");
     } else {

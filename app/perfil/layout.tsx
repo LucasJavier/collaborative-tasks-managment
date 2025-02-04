@@ -37,7 +37,7 @@ export default function PerfilLayout({ children }: { children: React.ReactNode }
 
   return (
     <div className="flex-1 grid grid-cols-4 h-screen">
-      <nav className="col-span-1 bg-eerieBlack p-4 overflow-y-auto">
+      <nav className="col-span-1 bg-eerieBlack p-4 overflow-y-auto sticky top-0 h-full">
         <h2 className="text-xl font-bold mb-4">Hola, {user?.name}!</h2>
         <ul className="space-y-2">
           <li className="flex items-center gap-2 w-full">
@@ -107,7 +107,7 @@ export default function PerfilLayout({ children }: { children: React.ReactNode }
           </div>
         )}
       </nav>
-      <main className="col-span-3 bg-zinc-800 p-8 overflow-y-auto flex">
+      <main className="col-span-3 bg-zinc-800 p-8 flex">
         {children}
       </main>
     </div>

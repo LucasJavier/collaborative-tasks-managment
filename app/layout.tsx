@@ -1,6 +1,5 @@
 import "./globals.css";
 import Header from "@/componentes/Header";
-import Footer from "@/componentes/Footer";
 import { auth } from "@/auth";
 import { SessionProvider } from "next-auth/react";
 import { ModalProvider } from './contexto/modalContexto';
@@ -19,19 +18,16 @@ export default async function RootLayout({
 
   return (
     <html lang="es">
-      <body className="w-full h-screen flex flex-col bg-gray-700 overflow-x-hidden">
+      <body className="w-full min-h-screen flex flex-col bg-gray-700 overflow-x-hidden">
         <SessionProvider session={session}>
           <div className="shadow-xl shadow-white">
             <Header />
           </div>
           <ModalProvider>
-            <main className="min-h-screen flex-1 flex justify-center shadow-2xl shadow-white">
+            <main className="flex-1 flex justify-center shadow-2xl shadow-white">
               {children}
             </main>
           </ModalProvider>
-          <div className="shadow-xl shadow-white">
-            <Footer />
-          </div>
         </SessionProvider>
       </body>
     </html>

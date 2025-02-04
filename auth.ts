@@ -33,9 +33,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         const isValidPassword = await compare(passwordStr, user.password);
         if(!isValidPassword) throw new Error("Invalid password");
 
-        console.log(user.id);
-        console.log(user.nombreUsuario);
-
         return{
           id: String(user.id),
           nombre: user.nombre,
@@ -65,7 +62,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             rolID: 1,
           },
         });
-        console.log(nombre);
         return true;
       } catch (error) {
         console.error("Error en signIn callback:", error);
@@ -84,7 +80,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           token.nombreUsuario = dbUser.nombreUsuario; 
         }
       }
-      console.log(token)
       return token;
     },
     async session( {session,token}: {session: any; token: any}){
@@ -94,7 +89,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         session.user.id = token.id;
         session.user.name = token.nombreUsuario;
       }
-      console.log(session)
       return session;
     }
   },

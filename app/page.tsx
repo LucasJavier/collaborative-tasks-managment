@@ -1,10 +1,11 @@
+import Footer from "@/componentes/Footer";
 import Image from "next/image";
 import Link from "next/link";
 
 export default function HomePage() {
   return (
-    <div className="flex-1 flex-col w-full overflow-y-auto">
-      <div className="grid grid-cols-2 grid-rows-2 gap-4 h-full m-4">
+    <div className="flex-1 flex-col w-full mt-4">
+      <div className="grid grid-cols-2 grid-rows-2 gap-4 h-full">
         <div className="bg-transparent w-full h-full flex flex-col items-center justify-center p-4">
           <h1 className="text-4xl font-bold text-center text-black mb-4 drop-shadow-lg">
             Organiza tus tareas y tus equipos!
@@ -52,6 +53,9 @@ export default function HomePage() {
           </Link>
         </div>
       </div>
+        <div className="shadow-xl shadow-white">
+          <Footer />
+        </div>
     </div>
   );
 }
