@@ -73,14 +73,13 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         const dbUser = await prisma.usuario.findUnique({where: {email: user.email}});
         if (!dbUser) throw new Error("Usuario no encontrado");
         token.rolId = dbUser?.rolID || 1;
-        token.id = dbUser.id;
+        token.id = Number(dbUser.id);
         if (account?.provider === "github") {
           token.nombreUsuario = dbUser.nombre; 
         } else {
           token.nombreUsuario = dbUser.nombreUsuario; 
         }
       }
-      console.log(token)
       return token;
     },
     async session( {session,token}: {session: any; token: any}){
@@ -90,26 +89,12 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         session.user.id = token.id;
         session.user.name = token.nombreUsuario;
       }
-      console.log(session)
       return session;
     }
   },
   secret: process.env.NEXTAUTH_SECRET!,
   session: {
     strategy: "jwt", // Usamos JWT para manejar sesiones
-    maxAge: 30 * 24 * 60 * 60, // 30 días
-    updateAge: 24 * 60 * 60, // 1 día
-  },
-  cookies: {
-    sessionToken: {
-      name: "next-auth.session-token",
-      options: {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production", // Asegúrate de que esto sea true en producción
-        path: "/",
-        sameSite: "lax",
-      },
-    },
   },
   pages: {
     signIn: "/auth/login", // Página personalizada de inicio de sesión
