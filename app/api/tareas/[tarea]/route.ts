@@ -21,9 +21,8 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ tare
         if(!task) {
             return NextResponse.json({ error: "Tarea no encontrada" }, { status: 404 });
         }
-    
         const { comentarios, ...tareas } = task;
-    
+            
         return NextResponse.json({
             tareas,
             comentarios,

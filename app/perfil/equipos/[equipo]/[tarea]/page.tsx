@@ -19,6 +19,7 @@ export default function TareaPage({ params }: { params: Promise<{equipo: string;
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
   const { data: session, status } = useSession();
+  const [buscarTarea, setBuscarTarea] = useState<Boolean>(false);
 
   useEffect(() => {
     const unwrapParams = async () => {
@@ -39,6 +40,7 @@ export default function TareaPage({ params }: { params: Promise<{equipo: string;
       try {
         const response = await fetch(`/api/equipos/${idEquipo}/middleware`);
         if (!response.ok) router.push("/auth/noAutorizado");
+        else setBuscarTarea(true);
       } catch (err: any) {
         setError(err.message);
       }
@@ -47,23 +49,22 @@ export default function TareaPage({ params }: { params: Promise<{equipo: string;
   }, [idTarea]);
 
   useEffect(() => {
-    if (!idTarea) return; 
-
     const fetchTarea = async () => {
-      try {
-        const response = await fetch(`/api/tareas/${idTarea}`);
-        if (!response.ok) throw new Error("Error al cargar la tarea");
-        const data = await response.json();
-        const { tarea, comentarios } = data;
-        setTarea(tarea); 
-        setComentarios(comentarios); 
-      } catch (err: any) {
-        setError(err.message);
-      }
-    };
-
+      if(buscarTarea){
+        try {
+          const response = await fetch(`/api/tareas/${idTarea}`);
+          if (!response.ok) throw new Error("Error al cargar la tarea");
+          const data = await response.json(); 
+          const { tareas, comentarios } = data;
+          setTarea(tareas); 
+          setComentarios(comentarios); 
+        } catch (err: any) {
+          setError(err.message);
+        }
+      };
+    }; 
     fetchTarea();
-  }, [idTarea]);
+  }, [buscarTarea]);
 
   const handleMarcarCompletada = async () => {
     if (!tarea) return; 

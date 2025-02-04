@@ -5,6 +5,7 @@ import { usePathname, useRouter } from "next/navigation";
 import Image from "next/image";
 import BotonAñadir from "@/componentes/botonAñadir";
 import { useModal } from "@/app/contexto/modalContexto";
+import { useEffect } from "react";
 
 export default function PerfilLayout({ children }: { children: React.ReactNode }) {
   const { data: session, status } = useSession();
@@ -12,15 +13,21 @@ export default function PerfilLayout({ children }: { children: React.ReactNode }
   const currentPath = usePathname();
   const { toggleModal } = useModal();
 
+  useEffect(() => {
+    if (status === "unauthenticated") {
+      router.replace("/auth/login")
+    }; 
+  }, [status, router]);
+
   if (status === "loading") {
     return <p>Cargando...</p>;
   }
 
-  if (!session) {
-    router.push("/auth/login");
-    return null;
+  if (status === "unauthenticated") {
+    return <p>Redirigiendo...</p>;
   }
-  const { user } = session;
+
+  const { user } = session!;
 
   const isEquipoPage = currentPath.startsWith('/perfil/equipos/') && 
                     currentPath.split('/').filter(Boolean).length === 3 && 

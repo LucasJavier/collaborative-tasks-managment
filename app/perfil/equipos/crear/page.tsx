@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import EquipoEnlace from "@/componentes/EquipoEnlace";
@@ -13,14 +13,21 @@ export default function CrearEquipo() {
   const router = useRouter();
   const { data: session, status } = useSession();
 
-  if (status === "loading") {
-    return <p>Cargando...</p>;
-  }
+   useEffect(() => {
+      if (status === "unauthenticated") {
+        router.replace("/auth/login")
+      }; 
+    }, [status, router]);
+  
+    if (status === "loading") {
+      return <p>Cargando...</p>;
+    }
+  
+    if (status === "unauthenticated") {
+      return <p>Redirigiendo...</p>;
+    }
 
-  if (!session) {
-    router.push("/auth/login");
-    return null;
-  }
+    const { user } = session!;
 
   const handleSubmit = async () => {
     setError("");
@@ -32,7 +39,7 @@ export default function CrearEquipo() {
     try {
       setLoading(true);
 
-      const usuarioId = session.user?.id;
+      const usuarioId = user.id;
       if (!usuarioId) {
         setError("No se pudo obtener la información del usuario.");
         return;
