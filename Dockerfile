@@ -1,21 +1,22 @@
-FROM node:20-alpine as builder
+    FROM node:20-alpine as builder
 
-WORKDIR /app
+    WORKDIR /app
 
-COPY package.json package-lock.json ./
+    COPY package.json package-lock.json ./
+    COPY prisma ./prisma
 
-RUN npm install
+    RUN npm install
 
-COPY . .
+    COPY . .
 
-RUN npx prisma generate
+    RUN npx prisma generate
 
-RUN npm run build
+    RUN npm run build
 
-RUN npm prune --production
+    RUN npm prune --production
 
-ENV NODE_ENV=production
+    ENV NODE_ENV=production
 
-EXPOSE 8080
+    EXPOSE 3000
 
-CMD ["npm", "start"]
+    CMD ["npm", "start"]
