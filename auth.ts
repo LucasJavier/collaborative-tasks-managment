@@ -46,21 +46,27 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   ],
   callbacks: {
     async signIn({user}){
-      const nombre = user.name! || "usuario desconocido";
-      const email = user.email!;
-
-      await prisma.usuario.upsert({ 
-        where: { email }, 
-        update: {}, 
-        create: { 
-          nombre,
-          apellido:"",
-          nombreUsuario:"",
-          email,
-          password:"",
-          rolID:1, },
-      });
-      return true;
+      try {
+        const nombre = user.name! || "usuario desconocido";
+        const email = user.email!;
+    
+        await prisma.usuario.upsert({
+          where: { email },
+          update: {},
+          create: {
+            nombre,
+            apellido: "",
+            nombreUsuario: "",
+            email,
+            password: "",
+            rolID: 1,
+          },
+        });
+        return true;
+      } catch (error) {
+        console.error("Error en signIn callback:", error);
+        return false;
+      }
     },
     async jwt( {token,user,account}: {token: any; user: any; account: any}){
       if(user){
@@ -91,6 +97,19 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   secret: process.env.NEXTAUTH_SECRET!,
   session: {
     strategy: "jwt", // Usamos JWT para manejar sesiones
+    maxAge: 30 * 24 * 60 * 60, // 30 días
+    updateAge: 24 * 60 * 60, // 1 día
+  },
+  cookies: {
+    sessionToken: {
+      name: "next-auth.session-token",
+      options: {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production", // Asegúrate de que esto sea true en producción
+        path: "/",
+        sameSite: "lax",
+      },
+    },
   },
   pages: {
     signIn: "/auth/login", // Página personalizada de inicio de sesión
@@ -98,3 +117,4 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   },
   trustHost: true, // Permitir localhost como host confiable
 });
+
