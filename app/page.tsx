@@ -4,8 +4,8 @@ import Link from "next/link";
 
 export default function HomePage() {
   return (
-    <div className="flex-1 flex-col w-full mt-4">
-      <div className="grid grid-cols-2 grid-rows-2 gap-4 h-full">
+    <div className="flex flex-col min-h-screen w-full">
+      <div className="grid grid-cols-2 grid-rows-2 gap-4 m-2 h-full relative z-10">
         <div className="bg-transparent w-full h-full flex flex-col items-center justify-center p-4">
           <h1 className="text-4xl font-bold text-center text-black mb-4 drop-shadow-lg">
             Organiza tus tareas y tus equipos!
@@ -20,22 +20,20 @@ export default function HomePage() {
             Iniciar sesión
           </Link>
         </div>
-        <div className="w-full h-full bg-transparent relative overflow-hidden rounded-2xl shadow-lg">
+        <div className="flex-initial bg-transparent relative overflow-hidden rounded-2xl shadow-lg">
           <Image
             src="/images/task-manager_teams.png"
             alt="Team Task"
             fill
             style={{objectFit: "contain", objectPosition: "center"}}
-            className="rounded-2xl"
           />
         </div>
-        <div className="w-full h-full bg-transparent relative overflow-hidden rounded-2xl shadow-lg">
+        <div className="flex-initial bg-transparent relative overflow-hidden rounded-2xl shadow-lg">
           <Image
             src="/images/task-manager_tasks.png"
             alt="Team Task"
-            fill 
+            fill
             style={{objectFit: "contain", objectPosition: "center"}}
-            className="rounded-2xl" 
           />
         </div>
         <div className="bg-transparent w-full h-full flex flex-col items-center justify-center p-4">
@@ -53,9 +51,11 @@ export default function HomePage() {
           </Link>
         </div>
       </div>
-        <div className="shadow-xl shadow-white">
-          <Footer />
-        </div>
+
+      {/* Aquí se coloca el footer al final y con un z-index bajo */}
+      <div className="relative z-0">
+        <Footer />
+      </div>
     </div>
   );
 }

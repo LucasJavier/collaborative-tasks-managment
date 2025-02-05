@@ -28,15 +28,15 @@ export default function PerfilLayout({ children }: { children: React.ReactNode }
     return () => window.removeEventListener("scroll", handScroll)
   }, [])
 
-  if (status === "loading") {
+  /*if (status === "loading") {
     return <p>Cargando...</p>;
   }
 
   if (status === "unauthenticated") {
     return <p>Redirigiendo...</p>;
-  }
+  }*/
 
-  const { user } = session!;
+  //const { user } = session!;
 
   const isEquipoPage = currentPath.startsWith('/perfil/equipos/') && 
                     currentPath.split('/').filter(Boolean).length === 3 && 
@@ -50,7 +50,7 @@ export default function PerfilLayout({ children }: { children: React.ReactNode }
         <nav className="absolute w-full p-4 transition-all"
           style={{top: `${scrollNav}px` }}
           >
-          <h2 className="text-xl font-bold mb-4">Hola, {user?.name}!</h2>
+          <h2 className="text-xl font-bold mb-4">Hola, {session?.user?.name}!</h2>
           <ul className="space-y-2">
             <li className="flex items-center gap-2 w-full">
               <Image

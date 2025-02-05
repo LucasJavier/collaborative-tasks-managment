@@ -8,6 +8,7 @@ export async function middleware(req: NextRequest) {
                 "next-auth.session-token" : 
                 "__Secure-next-auth.session-token",
     secret: process.env.NEXTAUTH_SECRET! });
+    
   const path = req.nextUrl.pathname;
   const isAuthPath = path.startsWith("/auth");
   const isRootPath = path === "/";

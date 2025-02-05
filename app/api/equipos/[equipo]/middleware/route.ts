@@ -14,7 +14,12 @@ export async function GET(request: NextRequest,  { params }: { params: Promise<{
       );
     }
 
-    const token = await getToken({ req: request, secret: process.env.NEXTAUTH_SECRET! });
+    const token = await getToken({ 
+      req: request, 
+      cookieName: process.env.NODE_ENV === "development"
+                ? "next-auth.session-token"
+                : "__Secure-next-auth.session-token",
+      secret: process.env.NEXTAUTH_SECRET! });
 
     if (!token || !token.id) {
       return NextResponse.json({ error: "Usuario no autenticado" }, { status: 401 });
