@@ -80,6 +80,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           token.nombreUsuario = dbUser.nombreUsuario; 
         }
       }
+      console.log("token: ", token)
       return token;
     },
     async session( {session,token}: {session: any; token: any}){
@@ -89,6 +90,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         session.user.id = token.id;
         session.user.name = token.nombreUsuario;
       }
+      console.log("session: ", session)
       return session;
     }
   },
