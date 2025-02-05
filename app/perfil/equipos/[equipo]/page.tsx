@@ -14,6 +14,7 @@ interface Equipo {
   id: number;
   nombre: string;
   creadoEn: string;
+  idJefe: Number;
 }
 
 export default function EquipoPage({ params }: { params: Promise<{ equipo: string }> }) {
@@ -52,7 +53,7 @@ export default function EquipoPage({ params }: { params: Promise<{ equipo: strin
     const fetchEquipo = async () => {
       try {
         const response = await fetch(`/api/equipos/${idEquipo}`);
-        if (!response.ok) throw new Error("Error al cargar los equipos");
+        if (!response.ok) throw new Error("Error al cargar el equipos");
         const data = await response.json();
         const { equipo, tareas } = data;
         setTarea(tareas);
@@ -91,10 +92,21 @@ export default function EquipoPage({ params }: { params: Promise<{ equipo: strin
   if (!session) return <div>No estás autenticado</div>;
 
   const fechaCreacion = format(new Date(equipo.creadoEn), "dd MMMM yyyy, HH:mm:ss", { locale: es });
+  const { user } = session!;
 
   return (
     <div className="p-6 flex-1">
-      <h1 className="text-2xl font-bold">{equipo.nombre}</h1>
+      {Number(user.id) === equipo.idJefe ? (
+        <div className="flex justify-between items-center">
+        <h1 className="text-2xl font-bold">{equipo.nombre}</h1>
+        <button
+          onClick={() => router.push(`/perfil/equipos/${idEquipo}/usuarios/`)}
+          className="border border-blue-500 text-blue-500 rounded-full px-4 py-2 transition-colors hover:bg-blue-500 hover:text-white"
+        >
+          Ver usuarios de tu equipo
+        </button>
+      </div>
+      ) : <h1 className="text-2xl font-bold">{equipo.nombre}</h1>}
       <p className="mb-4">Creado en {fechaCreacion}</p>
       <h2 className="text-xl font-bold mt-6">Tareas</h2>
 

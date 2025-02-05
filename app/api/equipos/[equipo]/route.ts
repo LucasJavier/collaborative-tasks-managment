@@ -32,6 +32,7 @@ export async function GET(request: NextRequest, { params} : { params: Promise<{ 
                 id: true,
                 nombre: true,
                 creadoEn: true,
+                idJefe: true,
             },
         });
 
