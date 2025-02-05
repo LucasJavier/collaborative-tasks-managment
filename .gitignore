@@ -48,3 +48,6 @@ docker-compose.yml
 
 # Prisma
 /prisma/migrations/
+
+.vercel
+.env*.local
