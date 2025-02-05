@@ -80,7 +80,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           token.nombreUsuario = dbUser.nombreUsuario; 
         }
       }
-      console.log("token: ", token)
       return token;
     },
     async session( {session,token}: {session: any; token: any}){
@@ -90,21 +89,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         session.user.id = token.id;
         session.user.name = token.nombreUsuario;
       }
-      console.log("session: ", session)
       return session;
     }
   },
   secret: process.env.NEXTAUTH_SECRET!,
-  cookies: {
-    sessionToken: {
-      name: `__Secure-next-auth.session-token`,
-      options: {
-        httpOnly: true,
-        sameSite: "lax",
-        secure: true,
-      },
-    },
-  },
   session: {
     strategy: "jwt", // Usamos JWT para manejar sesiones
   },

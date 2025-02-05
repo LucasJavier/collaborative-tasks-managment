@@ -2,13 +2,12 @@ import { NextResponse, NextRequest } from "next/server";
 import { getToken } from "next-auth/jwt";
 
 export async function middleware(req: NextRequest) {
-  console.log("process:", process.env.NEXTAUTH_SECRET!)
-  console.log("req: ", req)
  const token = await getToken({ 
     req, 
-    cookieName: "__Secure-next-auth.session-token",
-    secret: process.env.NEXTAUTH_SECRET!, raw: true });
-  console.log("token middleware: ", token)
+    cookieName: process.env.NODE_ENV === "development" ?
+                "next-auth.session-token" : 
+                "__Secure-next-auth.session-token",
+    secret: process.env.NEXTAUTH_SECRET! });
   const path = req.nextUrl.pathname;
   const isAuthPath = path.startsWith("/auth");
   const isRootPath = path === "/";
