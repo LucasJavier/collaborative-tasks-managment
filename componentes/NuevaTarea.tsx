@@ -40,7 +40,7 @@ const NuevaTarea: React.FC<NuevaTarea> = ({ onClose, onSave, equipoId, usuarioId
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50 text-black">
       <div className="bg-white p-6 rounded-lg shadow-md w-full max-w-md">
-        <h2 className="text-xl font-bold mb-4">Nueva Tarea</h2>
+        <h2 className="text-xl font-bold mb-4 text-center">Nueva Tarea</h2>
         <label className="block mb-2">
           Título:
           <input
