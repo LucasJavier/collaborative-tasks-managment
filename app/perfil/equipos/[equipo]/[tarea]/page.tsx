@@ -7,6 +7,8 @@ import { format } from "date-fns";
 import { es } from "date-fns/locale";
 import { useSession } from "next-auth/react";
 import ComentarioCard from '@/componentes/ComentarioCard'; 
+import Image from "next/image";
+import EditarTarea from '@/componentes/EditarTarea';
 
 export default function TareaPage({ params }: { params: Promise<{equipo: string; tarea: string }> }) {
   const [idTarea, setIdTarea] = useState<string | null>(null);
@@ -20,6 +22,7 @@ export default function TareaPage({ params }: { params: Promise<{equipo: string;
   const router = useRouter();
   const { data: session, status } = useSession();
   const [buscarTarea, setBuscarTarea] = useState<Boolean>(false);
+  const [modalEditarTarea, setModalEditarTarea] = useState(false);
 
   useEffect(() => {
     const unwrapParams = async () => {
@@ -72,7 +75,7 @@ export default function TareaPage({ params }: { params: Promise<{equipo: string;
       const response = await fetch(`/api/tareas/${idTarea}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ completada: !tarea?.completada }),
+        body: JSON.stringify({ completada: !tarea?.completada, action: 1 }),
       });
       if (!response.ok) throw new Error("Error al actualizar la tarea");
       const data = await response.json();
@@ -108,7 +111,7 @@ export default function TareaPage({ params }: { params: Promise<{equipo: string;
     setComentarioIdEditado(comentarioIdEditado);
   };
 
-  const handleCancelarEdicion = () => {
+  const handleCancelarEdicion = () => { 
     setComentarioEditado("");
     setComentarioIdEditado(null);
   }
@@ -151,6 +154,23 @@ export default function TareaPage({ params }: { params: Promise<{equipo: string;
     }
   }
 
+  const handleSaveTarea = async (tareaActualizada: Tarea) => {
+    try {
+      const response = await fetch(`/api/tareas/${idTarea}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify( {tareaActualizada, action: 2} ),
+      });
+      if (!response.ok) throw new Error("Error al actualizar la tarea");
+      const data = await response.json();
+      setTarea(data);
+      setModalEditarTarea(false);
+    } catch (err: any) {
+      setError(err.message);
+    }
+  };
+
+
   if (error) return <p>Error: {error}</p>;
   if (!tarea) return <p>Cargando tarea...</p>;
   if (status === "loading") return <div>Cargando...</div>;
@@ -167,15 +187,33 @@ export default function TareaPage({ params }: { params: Promise<{equipo: string;
     tarea.prioridad === "baja" ? 
     "text-green-500" : tarea.prioridad === "media" ? 
     "text-yellow-500" : "text-red-500";
+
+  const esCreadoTarea_oAdmin = ((tarea.usuarioIdCreo === Number(session?.user?.id)) 
+    || (session?.user?.rolId === 2)) ? true : false
   
   return (
     <div className="p-6 flex-1">
-      <h1 className="text-2xl font-bold">{tarea.titulo}</h1>
+      {esCreadoTarea_oAdmin ? (
+        <div className="flex items-center">
+          <h1 className="text-2xl font-bold">{tarea.titulo}</h1>
+          <div
+            className="p-1 rounded hover:bg-green-400 hover:bg-opacity-50 transition duration-200 cursor-pointer ml-4"
+            onClick={() => { setModalEditarTarea(true) }}
+          >
+            <Image
+              src="/images/edit-50.png"
+              alt="Editar tarea"
+              width={20}
+              height={20}
+              className="filter invert brightness-0"
+            />
+          </div>
+      </div> ) : <h1 className="text-2xl font-bold">{tarea.titulo}</h1> }
       <p className="text-gray-300 mb-4">{tarea.descripcion || "Sin descripción"}</p>
       <p><strong>Prioridad: </strong> <span className={prioridadColor}>{tarea.prioridad}</span></p>
       <p><strong>Fecha Límite: </strong><span className={fechaLimiteColor}>{fechaLimiteFormateada}</span></p>
       <p><strong>Estado: </strong> <span className={completadaColor}>{tarea.completada ? "Completada" : "Pendiente"}</span></p>
-      {((tarea.usuarioIdCreo === Number(session?.user?.id)) || (session?.user?.rolId === 2)) && (
+      {esCreadoTarea_oAdmin && (
         <button 
         onClick={handleMarcarCompletada} 
         className={`px-4 py-2 mt-4 ${tarea.completada ? "bg-green-500" : "bg-red-500"} text-white rounded`}
@@ -198,6 +236,14 @@ export default function TareaPage({ params }: { params: Promise<{equipo: string;
         >
           Agregar comentario
         </button>
+
+        {modalEditarTarea && (
+          <EditarTarea 
+            tarea={tarea} 
+            onClose={() => setModalEditarTarea(false)} 
+            onSave={handleSaveTarea} 
+        />
+        )}
 
         <div className="mt-4">
           {comentarios.map((comentario) => (
