@@ -39,20 +39,46 @@ export async function PATCH(req: NextRequest, { params} : { params: Promise<{ ta
         if (isNaN(tareaId)) {
             return NextResponse.json({ error: "ID de tarea inválido" }, { status: 400 });
         }
-        const { completada } = await req.json();
+        
+        const body  = await req.json();
+        const { action, completada, tareaActualizada } = body;
+        let updatedTask;
 
-        if (typeof completada !== "boolean") {
-            return NextResponse.json({ error: "El campo 'completada' debe ser un valor booleano" }, { status: 400 });
+        switch(action){
+            case 1: // Marcar tarea completada/incompleta
+                if (typeof completada !== "boolean") {
+                    return NextResponse.json({ error: "El campo 'completada' debe ser un valor booleano" }, { status: 400 });
+                }
+                updatedTask = await prisma.tarea.update({
+                    where: { id: tareaId },
+                    data: { completada },
+                    include: { 
+                        comentarios: { include: { usuario: true } }, 
+                        usuario: { select: { id: true } }
+                    }, 
+                });
+                break;
+            case 2: // Actualizar tarea con los nuevos datos
+                if (!tareaActualizada) {
+                    return NextResponse.json({ error: "Datos de tarea inválidos" }, { status: 400 });
+                }
+                updatedTask = await prisma.tarea.update({
+                    where: { id: tareaId },
+                    data: {
+                        titulo: tareaActualizada.titulo,
+                        descripcion: tareaActualizada.descripcion,
+                        prioridad: tareaActualizada.prioridad,
+                        fechaLimite: tareaActualizada.fechaLimite,
+                    },
+                    include: {
+                        comentarios: { include: { usuario: true } },
+                        usuario: { select: { id: true } }
+                    }
+                });
+                break;
+            default:
+                return NextResponse.json({ error: "Acción no válida" }, { status: 400 });
         }
-
-        const updatedTask = await prisma.tarea.update({
-            where: { id: tareaId },
-            data: { completada },
-            include: { 
-                comentarios: { include: { usuario: true } }, 
-                usuario: { select: { id: true } }
-            }, 
-        });
 
         return NextResponse.json(updatedTask);
     } catch (error) {

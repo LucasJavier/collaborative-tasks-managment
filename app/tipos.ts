@@ -37,10 +37,10 @@ export interface Tarea {
     titulo: string;
     descripcion?: string; 
     completada?: boolean | false;
-    equipoId: number;
+    equipoId?: number;
     prioridad: Prioridad;
     fechaLimite: DateTime;
-    usuarioIdCreo: number;
+    usuarioIdCreo?: number;
     usuario?: Usuario;
     equipo?: Equipo;
 }
