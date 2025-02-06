@@ -9,6 +9,7 @@ import NuevaTarea from "@/componentes/NuevaTarea";
 import { useSession } from "next-auth/react";
 import { useModal } from "@/app/contexto/modalContexto";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 interface Equipo {
   id: number;
@@ -25,6 +26,8 @@ export default function EquipoPage({ params }: { params: Promise<{ equipo: strin
   const { data: session, status } = useSession();
   const { isModalOpen, toggleModal } = useModal();
   const router = useRouter();
+  const [nombreEquipo, setNombreEquipo] = useState<string>(''); 
+  const [modalNombreEquipo, setModalNombreEquipo] = useState<Boolean>(false);
 
   useEffect(() => {
     const unwrapParams = async () => {
@@ -58,6 +61,7 @@ export default function EquipoPage({ params }: { params: Promise<{ equipo: strin
         const { equipo, tareas } = data;
         setTarea(tareas);
         setEquipo(equipo);
+        setNombreEquipo(equipo.nombre);
       } catch (err: any) {
         setError(err.message);
       }
@@ -76,7 +80,7 @@ export default function EquipoPage({ params }: { params: Promise<{ equipo: strin
       if (!response.ok) throw new Error("Error al crear la tarea");
       const nuevaTarea = await response.json();
       setTarea((prevTareas) => [...prevTareas, nuevaTarea]);
-      !isModalOpen;
+      toggleModal();
     } catch (err: any) {
       setError(err.message);
     }
@@ -84,6 +88,24 @@ export default function EquipoPage({ params }: { params: Promise<{ equipo: strin
 
   const handleEliminarTarea = (tareaId: number) => {
     setTarea((prevTareas) => prevTareas.filter((tarea) => tarea.id !== tareaId));
+  };
+
+  const handleCambiarNombreEquipo = async () => {
+    try {
+      const response = await fetch(`/api/equipos/${idEquipo}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ nombre: nombreEquipo }), // Enviar el nuevo nombre
+      });
+      if (!response.ok) throw new Error("Error al actualizar el nombre del equipo");
+      const { equipo: updatedEquipo } = await response.json();
+      setEquipo(updatedEquipo);
+      setModalNombreEquipo(false); 
+    } catch (err: any) {
+      setError(err.message);
+    }
   };
 
   if (error) return <p>Error: {error}</p>;
@@ -97,8 +119,22 @@ export default function EquipoPage({ params }: { params: Promise<{ equipo: strin
   return (
     <div className="p-6 flex-1">
       {Number(user.id) === equipo.idJefe ? (
-        <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold">{equipo.nombre}</h1>
+        <div className="flex justify-between items-center relative">
+          <div className="flex items-center gap-2">
+            <h1 className="text-2xl font-bold">{equipo.nombre}</h1>
+            <div
+              className="p-1 rounded hover:bg-green-400 hover:bg-opacity-50 transition duration-200 cursor-pointer"
+              onClick={() => setModalNombreEquipo(true)}
+            >
+              <Image
+                src="/images/edit-50.png"
+                alt="Editar nombre de equipo"
+                width={20}
+                height={20}
+                className="filter invert brightness-0"
+              />
+            </div>
+          </div>
         <button
           onClick={() => router.push(`/perfil/equipos/${idEquipo}/usuarios/`)}
           className="border border-blue-500 text-blue-500 rounded-full px-4 py-2 transition-colors hover:bg-blue-500 hover:text-white"
@@ -132,6 +168,33 @@ export default function EquipoPage({ params }: { params: Promise<{ equipo: strin
           usuarioId={session.user?.id ?? ""}
         />
       )}
+
+      {modalNombreEquipo && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+          <div className="bg-slate-800 p-6 rounded-md w-96 shadow-md">
+            <h2 className="text-2xl font-bold mb-4 text-white">Editar nombre del equipo</h2>
+            <input
+              type="text"
+              value={nombreEquipo}
+              onChange={(e) => setNombreEquipo(e.target.value)} 
+              className="border border-gray-300 p-2 w-full mb-4 text-black"
+            />
+            <button
+              onClick={handleCambiarNombreEquipo}
+              className="bg-green-300 text-black px-4 py-2 rounded-full hover:bg-green-500"
+            >
+              Guardar cambios
+            </button>
+            <button
+              onClick={() => setModalNombreEquipo(false)}
+              className="ml-4 bg-red-300 text-black px-4 py-2 rounded-full hover:bg-red-500"
+            >
+              Cancelar
+            </button>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 }
