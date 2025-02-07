@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { registroSchema } from "@/lib/zod";
 import { z } from "zod";
 import { signIn } from "next-auth/react";
+import Link from "next/link";
 
 export default function Registro() {
   const [error, setError] = useState("");
@@ -48,7 +49,7 @@ export default function Registro() {
         });
     
         if (!respuesta || respuesta.error) {
-          setError(respuesta?.error || "Credenciales inválidas");
+          setError("Credenciales inválidas");
         } else {
           router.push("/auth/registroExitoso"); 
         }
@@ -120,7 +121,13 @@ export default function Registro() {
         >
           {loading ? "Creando usuario..." : "Registrarse"}
         </button>
-        {error && <p className="text-red-500 mt-2">{error}</p>}
+        {error && <p className="text-red-500 mt-2 text-center">{error}</p>}
+        <p className="text-center text-white mt-4">
+            ¿Ya tienes una cuenta? 
+            <Link href="/auth/login" className="text-blue-500 hover:underline ml-1">
+              Inicia sesión
+            </Link>
+        </p>
       </form>
     </div>
   );
