@@ -5,6 +5,8 @@ import { useSession } from "next-auth/react";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
+import ConfirmarEliminarModal from "./EliminarModal";
 
 interface TareaCardProps {
   tarea: Tarea;
@@ -15,6 +17,7 @@ interface TareaCardProps {
 export default function TareaCard({ tarea, onDelete, equipoId}: TareaCardProps) {
   const { data: session, status } = useSession();
   const router = useRouter();
+   const [mostrarModal, setMostrarModal] = useState<boolean>(false)
 
   const handleEliminarTarea = async () => {
     try {
@@ -75,13 +78,29 @@ export default function TareaCard({ tarea, onDelete, equipoId}: TareaCardProps) 
         </button>
         {((tarea.usuarioIdCreo === Number(session?.user?.id)) || (session?.user?.rolId === 2)) ? (
           <button
-            onClick={handleEliminarTarea}
+            onClick={() => setMostrarModal(true)}
             className="flex-1 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-400 transition duration-300 ease-in-out transform"
           >
             Eliminar tarea
           </button>
         ) : null}
       </div>
+      <ConfirmarEliminarModal
+        abrirModal={mostrarModal}
+        elemento="tarea"
+        mensaje={
+          <>
+            ¿Seguro que deseas eliminar la tarea <span className="text-green-500 font-bold">
+              "{tarea.titulo}"</span>
+            ? Esta acción no se puede deshacer.
+          </>
+        }
+        confirmar={() => {
+          handleEliminarTarea();
+          setMostrarModal(false);
+        }}
+        cancelar={() => setMostrarModal(false)}
+      />
     </div>
   );
 }

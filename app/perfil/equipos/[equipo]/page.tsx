@@ -27,7 +27,7 @@ export default function EquipoPage({ params }: { params: Promise<{ equipo: strin
   const { isModalOpen, toggleModal } = useModal();
   const router = useRouter();
   const [nombreEquipo, setNombreEquipo] = useState<string>(''); 
-  const [modalNombreEquipo, setModalNombreEquipo] = useState<Boolean>(false);
+  const [modalNombreEquipo, setModalNombreEquipo] = useState<boolean>(false);
 
   useEffect(() => {
     const unwrapParams = async () => {

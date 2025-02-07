@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import ConfirmarEliminarModal from "@/componentes/EliminarModal";
 
 interface Usuario {
   id: number;
@@ -17,6 +18,7 @@ export default function UsuariosEquipoPage({ params }: { params: Promise<{ equip
   const [idEquipo, setIdEquipo] = useState<string | null>(null);
   const { data: session, status } = useSession();
   const router = useRouter();
+  const [mostrarModal, setMostrarModal] = useState<boolean>(false)
 
   useEffect(() => {
     const unwrapParams = async () => {
@@ -80,20 +82,37 @@ export default function UsuariosEquipoPage({ params }: { params: Promise<{ equip
     <div className="p-6 max-w-4xl mx-auto">
       <h1 className="text-2xl font-bold mb-4 text-center">Usuarios en el equipo</h1>
       <div className="space-y-4">
-        {usuarios.map((usuario) => 
-            (usuario.id !== Number(user.id)) && (
-                <div key={usuario.id} className="flex justify-between gap-2 items-center bg-gray-100 p-4 rounded-full shadow">
-                    <span className="text-lg font-semibold text-blue-900">{usuario.nombreUsuario}</span>
-                    <span className="text-gray-600">{usuario.email}</span>
-                    <div
-                        className="p-1 rounded hover:bg-red-500 hover:bg-opacity-50 transition duration-200 cursor-pointer"
-                        onClick={() => handleEliminarUsuario(usuario.id)}
-                    >
-                        <Image src="/images/delete-user-50.png" alt="Eliminar usuario" width={20} height={20} />
-                    </div>
-                </div>
-            ))}
-        </div>
+      {usuarios.map((usuario) => 
+        (usuario.id !== Number(user.id)) && (
+          <div key={usuario.id} className="flex justify-between gap-2 items-center bg-gray-100 p-4 rounded-full shadow">
+            <span className="text-lg font-semibold text-blue-900">{usuario.nombreUsuario}</span>
+            <span className="text-gray-600">{usuario.email}</span>
+            <div
+              className="p-1 rounded hover:bg-red-500 hover:bg-opacity-50 transition duration-200 cursor-pointer"
+              onClick={() => setMostrarModal(true)}
+            >
+              <Image src="/images/delete-user-50.png" alt="Eliminar usuario" width={20} height={20} />
+            </div>
+            <ConfirmarEliminarModal
+              abrirModal={mostrarModal}
+              elemento="usuario"
+              mensaje={
+                <>
+                  ¿Seguro que deseas eliminar al usuario <span className="text-green-500 font-bold">
+                    "{usuario.nombreUsuario}"</span>
+                  ? Esta acción no se puede deshacer.
+                </>
+              }
+              confirmar={() => {
+                handleEliminarUsuario(usuario.id);
+                setMostrarModal(false);
+              }}
+              cancelar={() => setMostrarModal(false)}
+            />
+          </div>
+        )   
+      )}
+      </div>
     </div>
   );
 }
