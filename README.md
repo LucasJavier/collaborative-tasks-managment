@@ -9,7 +9,7 @@ Cosas a hacer:
 - [x] Dar la posibilidad al creador del equipo de eliminar usuarios de su equipo.
 - [x] Crear opción de editar tarea (fecha, nombre, prioridad, etc.).
 - [x] Crear opción de editar el nombre del equipo.
-- [] Al clickear "Eliminar tarea", "Eliminar equipo", o "Eliminar usuario", que aparezca primero una aviso (doble confirmación).
+- [X] Al clickear "Eliminar tarea", "Eliminar equipo", o "Eliminar usuario", que aparezca primero una aviso (doble confirmación).
 - [] Hacerlo más responsive.
 - [] Agregar la opción de comentar un comentario.
 - [] Agregar lógica para que el link de invitación de unión a un equipo solo dure un tiempo.
