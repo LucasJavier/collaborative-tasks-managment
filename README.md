@@ -13,6 +13,7 @@ Cosas a hacer:
 - [] Hacerlo más responsive.
 - [] Agregar la opción de comentar un comentario.
 - [] Agregar lógica para que el link de invitación de unión a un equipo solo dure un tiempo.
+- [] Dar posibilidad de un usuario de un equipo irse de ese equipo.
 
 Modelo BD:
 
