@@ -5,6 +5,7 @@ import { DateTime } from "next-auth/providers/kakao";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
 import EquipoEnlace from "./EquipoEnlace";
+import ConfirmarEliminarModal from "./EliminarModal";
 
 export default function EquipoCard({ idEquipo, nombreEquipo, creadoEn, idJefe, nombreJefe, onDelete }:
   { idEquipo: number; nombreEquipo: string; creadoEn: DateTime; idJefe: number; nombreJefe: string; 
@@ -12,8 +13,10 @@ export default function EquipoCard({ idEquipo, nombreEquipo, creadoEn, idJefe, n
 
   const { data: session, status } = useSession();
   const [codigoInvitacion, setCodigoInvitacion] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>("");
+  const [mostrarModal, setMostrarModal] = useState<boolean>(false)
+
   const fechaCreacion = format(new Date(creadoEn), "EEEE dd 'de' MMMM, 'a las' HH:mm", { locale: es });
 
   const handleEliminarEquipo = async () => {
@@ -66,7 +69,7 @@ export default function EquipoCard({ idEquipo, nombreEquipo, creadoEn, idJefe, n
         {((idJefe === Number(session.user.id)) || (session.user.rolId === 2)) && (
           <div 
             className="absolute top-2 right-2 cursor-pointer opacity-90 hover:brightness-0 hover:grayscale hover:rounded-xl transition duration-300"
-            onClick={handleEliminarEquipo}
+            onClick={() => setMostrarModal(true)}
           >
             <Image
               src="/images/x-50.png"
@@ -81,6 +84,22 @@ export default function EquipoCard({ idEquipo, nombreEquipo, creadoEn, idJefe, n
           Eliminar equipo
         </span>
       </div>
+
+      <ConfirmarEliminarModal
+        abrirModal={mostrarModal}
+        elemento="equipo"
+        mensaje={
+          <>
+            ¿Seguro que deseas eliminar el equipo <span className="text-green-500 font-bold">"{nombreEquipo}"</span>
+            ? Esta acción no se puede deshacer.
+          </>
+        }
+        confirmar={() => {
+          handleEliminarEquipo();
+          setMostrarModal(false);
+        }}
+        cancelar={() => setMostrarModal(false)}
+      />
       
       <h2 className="text-lg font-bold text-center">{nombreEquipo}</h2>
       <p className="text-sm text-white">{`Creado el: `}<span className="text-gray-300">{fechaCreacion}</span></p>
