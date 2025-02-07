@@ -6,6 +6,7 @@ import GitHubSignIn from "@/componentes/auth/GitHubSignIn";
 import { signIn } from "next-auth/react";
 import { loginSchema } from "@/lib/zod";
 import { z } from "zod";
+import Link from "next/link";
 
 export default function Login() {
   const [signUpData, setSignUpData] = useState({ usuario_correo: "", password: "" });
@@ -33,7 +34,7 @@ export default function Login() {
       redirect: false,
     });
     if (!res || res.error) {
-      setError(res?.error || "Credenciales inválidas");
+      setError("Credenciales inválidas");
     } else {
       router.push("/perfil");
     }
@@ -70,7 +71,13 @@ export default function Login() {
         >
           {loading ? "Buscando usuario..." : "Iniciar sesión"}
         </button>
-        {error && <p className="text-red-500 mt-2">{error}</p>}
+        {error && <p className="text-red-500 mt-2 text-center">{error}</p>}
+        <p className="text-center text-white mt-4">
+            ¿No tienes una cuenta? 
+            <Link href="/auth/registro" className="text-blue-500 hover:underline ml-1">
+              ¡Regístrate!
+            </Link>
+        </p>
       </form>
       <section className="bg-transparent p-8 max-w-md w-full text-black flex items-center justify-center">
         <GitHubSignIn />

@@ -27,7 +27,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           },
         });
 
-        if(!user) {throw new Error("No user found");}
+        if(!user) return null;
 
         const passwordStr = String(password);
         const isValidPassword = await compare(passwordStr, user.password);
