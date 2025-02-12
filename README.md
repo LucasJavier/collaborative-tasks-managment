@@ -14,6 +14,9 @@ Cosas a hacer:
 - [] Agregar la opción de comentar un comentario.
 - [] Agregar lógica para que el link de invitación de unión a un equipo solo dure un tiempo.
 - [] Dar posibilidad de un usuario de un equipo irse de ese equipo.
+- [] Agregar paginación a los equipos y tareas.
+- [] Agregar la opción de filtros para las tareas, por prioridad y/o fecha.
+- [] Agregar barra de busqueda de tarea o equipo por nombre.
 
 Modelo BD:
 
