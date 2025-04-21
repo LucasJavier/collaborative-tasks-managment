@@ -1,7 +1,7 @@
 # collaborative-tasks-managment
 
 Link deploy:
-- Google Cloud Run: https://mi-app-155019853593.us-central1.run.app
+- Google Cloud Run (apagado): https://mi-app-155019853593.us-central1.run.app
 - Vercel: https://collaborative-tasks-managment-k5os.vercel.app/
 
 Cosas a hacer:
